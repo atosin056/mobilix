@@ -19,7 +19,7 @@ $network_map = [
 
 // Set the service ID for Airtel Gifting
 $service_id = 'BCA';
-$request_type = 'AWUF';
+$request_type = 'SME';
 $api_url = 'https://enterprise.mobilenig.com/api/v2/services/packages';
 
 // Set the Bearer Token

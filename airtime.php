@@ -34,6 +34,7 @@ if (isset($_POST["submit"])) {
 
     $network = $_GET["network"];
     $nickname = $_SESSION["nickname"];
+    $remaining = $_POST["remaining"];
 
     // var_dump($network); // Debug the value of network
 
@@ -48,8 +49,8 @@ if (isset($_POST["submit"])) {
         $user = $result->fetch_assoc();
         $balance = $user["balance"];
 
-        if ($balance >= $amt) {
-            $dedu = deduct($amt, $nickname);
+        if ($balance >= $remaining) {
+            $dedu = deduct($remaining, $nickname);
 
             if ($dedu) {
                 // Fetch updated balance
@@ -311,21 +312,35 @@ if (isset($response['details'])) {
                 			
                 			<div>
                 				
-                				<div style="display: flex;justify-content: space-between;width: 100% !important;flex-wrap: wrap;row-gap: 20px;" id="data_bundles_list">
+                				<div style="display: flex;flex-direction: column !important;justify-content: space-between;width: 100% !important;">
 
-                                    <div style="margin-top: 20px !important;display: flex;background: transparent;padding-bottom: 20px !important;border-bottom: 1px solid #000 !important;width: 100% !important;">
+                                    <div style="display: flex;flex-direction: column !important;background: transparent;padding-bottom: 20px !important;width: 100% !important;">
                                 
                                         <div style="width: 100% !important;">
                                             
-                                            <input type="number" name="amt" style="width: 100% !important;height: 50px;border: none !important;background: transparent !important;" class="came" minlength="100" maxlength ="20000" placeholder="100-20000">
+                                            <input type="number" name="amt" id="amt" style="background: transparent;border: none;border-bottom: 0.1px solid #6F7075;width: 100% !important;height: 50px;font-family: montserrat;color: white;" class="came" minlength="100" maxlength ="20000" placeholder="100-20000">
 
                                         </div>
 
-                                        <div style="width: 20% !important;">
+                                         <div style="width: 100% !important;">
+                                            
+                                            <input type="number" id="charge" readonly name="charge" style="background: transparent;border: none;border-bottom: 0.1px solid #6F7075;width: 100% !important;height: 50px;font-family: montserrat;color: white;" class="came" minlength="100" maxlength ="20000" placeholder="Our Discount">
+
+                                        </div>
+
+                                        <div style="width: 100% !important;">
+                                            
+                                            <input type="number" name="remaining" id="remaining" style="background: transparent;border: none;border-bottom: 0.1px solid #6F7075;width: 100% !important;height: 50px;font-family: montserrat;color: white;" class="came" minlength="100" maxlength ="20000" placeholder="What we would debit you!">
+
+                                        </div>
+
+                                        <div style="width: 100% !important;height: 40px;margin-top: 10px !important;">
                                             
                                             <input type="submit" name="submit" value="Pay" style="width: 100% !important;height: 100% !important;border-radius: 200px;border: none;color: white !important;font-family: Montserrat !important;background: #532AC7;">
 
                                         </div>
+
+              
 
                                      </div>
                 				
@@ -390,7 +405,7 @@ $(document).ready(function () {
         const phoneNumber = $('#phoneNumber').val();
 
         if (!phoneNumber) {
-            $('#carrierImage').hide(); // Hide the image if the input is empty
+            $('#carrierImage').hide();
             return;
         }
 
@@ -406,22 +421,28 @@ $(document).ready(function () {
 
                     let imageUrl = '';
                     let network = '';
+                    let chargePercentage = 0; // Default charge
 
                     if (carrier.includes('mtn')) {
                         imageUrl = 'images/mtn.png';
                         network = 'MTN';
+                        chargePercentage = 2;
                     } else if (carrier.includes('airtel')) {
                         imageUrl = 'images/airtel.png';
                         network = 'Airtel';
+                        chargePercentage = 1;
                     } else if (carrier.includes('glo')) {
                         imageUrl = 'images/glo.png';
                         network = 'Glo';
+                        chargePercentage = 5;
                     } else if (carrier.includes('9mobile')) {
                         imageUrl = 'images/9mobile.png';
                         network = '9mobile';
+                        chargePercentage = 2; // Assuming 9mobile charge is 2%
                     } else {
-                        imageUrl = 'images/profile.png'; // Default image
+                        imageUrl = 'images/profile.png';
                         network = 'Unknown';
+                        chargePercentage = 0; // Default charge if unknown
                     }
 
                     if (imageUrl) {
@@ -430,7 +451,10 @@ $(document).ready(function () {
                         $('#carrierImage').hide();
                     }
 
-                    // Directly send the network value to setnetwork.php without using localStorage
+                    // Update charge calculation based on carrier
+                    $('#amt').trigger('input'); // Recalculate charge after detecting carrier
+
+                    // Send network value to setnetwork.php
                     $.ajax({
                         url: 'setnetwork.php',
                         method: 'POST',
@@ -440,24 +464,22 @@ $(document).ready(function () {
                         }
                     });
 
-                    // // Update the browser URL (without reloading the page)
+                    // Update the URL without reloading
                     window.history.pushState(null, '', '?network=' + encodeURIComponent(network));
 
-                    // Send network to the current page (data.php) with the GET method
+                    // Send network to data.php
                     $.ajax({
                         url: 'data.php',
                         method: 'GET',
-                        data: { network: network }, // Send the network data as query parameters
-                        success: function(response) {
-                            console.log('Raw Response from data.php:', network);
-                            const trimmedResponse = response.trim();
-                            console.log('Trimmed Response:', network);
-
-                            // Display the response (e.g., network info) in a div with id #networkResult
-                            $('#networkResult').text(trimmedResponse);
+                        data: { network: network },
+                        success: function (response) {
+                            console.log('Raw Response from data.php:', response);
+                            $('#networkResult').text(response.trim());
                         }
                     });
 
+                    // Store charge percentage for use in the amount calculation
+                    $('#amt').data('chargePercentage', chargePercentage);
                 } else {
                     $('#carrierResult').text(`Error: ${response.message}`);
                     $('#carrierImage').hide();
@@ -470,13 +492,31 @@ $(document).ready(function () {
         });
     }
 
-    // Call the function on page load and whenever input changes
     getCarrierInfo();
     $('#phoneNumber').on('input change', getCarrierInfo);
+
+    // Get input elements
+    const amtInput = $('#amt');
+    const chargeInput = $('#charge');
+    const remainingInput = $('#remaining');
+
+    // Event listener to dynamically calculate charge
+    amtInput.on('input', function () {
+        const amt = parseFloat(amtInput.val());
+        const chargePercentage = amtInput.data('chargePercentage') || 0; // Default 0 if no carrier detected
+
+        if (!isNaN(amt) && amt > 0) {
+            const charge = ((amt * chargePercentage) / 100).toFixed(2);
+            const remaining = (amt - charge).toFixed(2);
+
+            chargeInput.val(charge);
+            remainingInput.val(remaining);
+        } else {
+            chargeInput.val('');
+            remainingInput.val('');
+        }
+    });
 });
-
-   
-
 
 
 

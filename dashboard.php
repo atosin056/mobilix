@@ -13,9 +13,12 @@ if (!isset($_SESSION["nickname"])) {
 
 $carrier = getCarrier($_SESSION["phone"]);
 
-$publicKey = 'pk_live_6ZCZ1O8E9xK+1CTf8rtAS5ex+rfKzxDi+3jenFyYTp8=';
+// $publicKey = 'pk_live_6ZCZ1O8E9xK+1CTf8rtAS5ex+rfKzxDi+3jenFyYTp8=';
 
-$balance = checkBalance($publicKey);
+// $balance = checkBalance($publicKey);
+
+
+
 
 // if (isset($_GET["transaction"])) {
     
@@ -331,7 +334,7 @@ closeButton.addEventListener('click', () => {
                                 
                                 <div style="width: 100% !important;display: flex;justify-content: center;gap: 35px !important;">
                                     
-                                    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;width: 100px !important;gap: 9px;">
+                                    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;width: 100px !important;gap: 9px;cursor: pointer;" onclick="window.location.href='bank.php';">
                                         
                                         <div style="width: 30px;height: 30px;">
                                                 
@@ -343,7 +346,7 @@ closeButton.addEventListener('click', () => {
 
                                         <div>
                                             
-                                            <font style="font-family: montserrat;color: white;font-size: 9px !important;font-weight: 500 !important;line-height: normal;text-align: center">To&nbsp;Cashsave</font>
+                                            <font style="font-family: montserrat;color: white;font-size: 9px !important;font-weight: 500 !important;line-height: normal;text-align: center">To&nbsp;Bank</font>
 
                                         </div>
 
@@ -361,7 +364,7 @@ closeButton.addEventListener('click', () => {
 
                                         <div style="width: 100% !important;background: transparent;">
                                             
-                                            <font style="font-family: montserrat;color: white;font-size: 10px !important;font-weight: 500 !important;line-height: normal;text-align: center">To&nbsp;Mobilix&nbsp;Account</font>
+                                            <font style="font-family: montserrat;color: white;cursor: pointer;font-size: 10px !important;font-weight: 500 !important;line-height: normal;text-align: center">To&nbsp;Mobilix&nbsp;Account</font>
 
                                         </div>
 
@@ -369,7 +372,7 @@ closeButton.addEventListener('click', () => {
 
                                     <!-- End -->
 
-                                    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;width: 100px !important;gap: 9px;">
+                                    <div style="display: flex;flex-direction: column;cursor: pointer;justify-content: center;align-items: center;width: 100px !important;gap: 9px;">
                                         
                                         <div style="width: 30px;height: 30px;">
                                                 

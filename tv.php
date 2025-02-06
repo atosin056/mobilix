@@ -216,7 +216,7 @@ if (isset($_POST["pay"])) {
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Mobilix | Your One stop Platform for Airtime and Data | Airtime</title>
+	<title>Mobilix | Your One stop Platform for Airtime and Data | TV</title>
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 

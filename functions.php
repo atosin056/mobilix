@@ -344,12 +344,98 @@ function sendmail($to, $subject, $message) {
 
 }
 
+function disburseFundsMonnify($amount, $reference, $accountNumber, $bankCode, $sourceAccountNumber, $narration = "Fund Transfer") {
+
+    $monnifyApiKey = 'MK_TEST_TYKDWRWU64'; 
+    
+    $monnifySecretKey = 'Y01XFKC036187NTNNYSZ0V1VD72QGQT5'; 
+
+    // Step 1: Authenticate
+    $authUrl = "https://sandbox.monnify.com/api/v1/auth/login";
+    
+    $authCredentials = base64_encode("$monnifyApiKey:$monnifySecretKey");
+    
+    $authCh = curl_init();
+    
+    curl_setopt($authCh, CURLOPT_URL, $authUrl);
+    
+    curl_setopt($authCh, CURLOPT_RETURNTRANSFER, true);
+    
+    curl_setopt($authCh, CURLOPT_HTTPHEADER, [
+    
+        "Authorization: Basic $authCredentials",
+    
+        "Content-Type: application/json",
+    
+    ]);
+    
+
+
+    curl_setopt($authCh, CURLOPT_POST, true);
+    
+    $authResponse = curl_exec($authCh);
+    
+    if (curl_errno($authCh)) {
+    
+        die('Authentication Error: ' . curl_error($authCh));
+    
+    }
+    
+    curl_close($authCh);
+    
+    $decodedAuthResponse = json_decode($authResponse, true);
+    if (!isset($decodedAuthResponse['responseBody']['accessToken'])) {
+    
+        die('Error: ' . ($decodedAuthResponse['responseMessage'] ?? 'Unknown authentication error.'));
+    }
+    $accessToken = $decodedAuthResponse['responseBody']['accessToken'];
+
+    // Step 2: Disburse funds
+    $disbursementUrl = "https://sandbox.monnify.com/api/v2/disbursements/single";
+    $data = [
+        "amount" => $amount,
+        "reference" => $reference,
+        "narration" => $narration,
+        "sourceAccountNumber" => $sourceAccountNumber,
+        "destinationAccountNumber" => $accountNumber,
+        "destinationBankCode" => $bankCode,
+        "currency" => "NGN"
+    ];
+    $disburseCh = curl_init();
+    curl_setopt($disburseCh, CURLOPT_URL, $disbursementUrl);
+    curl_setopt($disburseCh, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($disburseCh, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer $accessToken",
+        "Content-Type: application/json",
+    ]);
+    curl_setopt($disburseCh, CURLOPT_POST, true);
+    curl_setopt($disburseCh, CURLOPT_POSTFIELDS, json_encode($data));
+    $disburseResponse = curl_exec($disburseCh);
+    if (curl_errno($disburseCh)) {
+        die('Disbursement Error: ' . curl_error($disburseCh));
+    }
+    curl_close($disburseCh);
+
+    // Handle response
+    $decodedDisburseResponse = json_decode($disburseResponse, true);
+    if (!$decodedDisburseResponse) {
+        die("Error: Unable to decode JSON response from Monnify.");
+    }
+    if (isset($decodedDisburseResponse['responseCode']) && $decodedDisburseResponse['responseCode'] === "0") {
+       return true;
+    } else {
+       return false;
+    }
+}
+
 function registerUser($fname, $lname, $email, $phone, $nickname, $pin) {
     include 'connect.php';
-    $checkPin = checkPin($pin);
-    if ($checkPin) {
-        echo 'pin is taken.';
-    }
+    $check = "SELECT * FROM `users` WHERE `pin`='".$pin."'";
+
+    $check_query = mysqli_query($conn, $check);
+
+    if (mysqli_num_rows($check_query) > 0) {}
+        else{
 $insert ="INSERT INTO `users` (`firstname`, `lastname`, `email`, `phone`, `nickname`, `pin`, `balance`) 
               VALUES ('$fname', '$lname', '$email', '$phone', '$nickname', '$pin', 1.00)";
     $insert_query = mysqli_query($conn, $insert);
@@ -359,6 +445,7 @@ $insert ="INSERT INTO `users` (`firstname`, `lastname`, `email`, `phone`, `nickn
     else{
         return false;
     }
+}
 }
 
 function checkBalance($publicKey) {
@@ -424,7 +511,7 @@ function transferMoneyToMobilix($amt, $phone, $sender) {
 
 function recharge($service_id,$beneficiary, $trans_id, $code, $amount) {
     $apiUrl = 'https://enterprise.mobilenig.com/api/v2/services/';
-    $secretKey = 'sk_test_9GSi0mR+W/bufqFKCKRMaPlG4GoUZ/2avq2pXYTg478='; // Replace with your actual secret key
+    $secretKey = 'sk_live_KPKjVO1C4FrOI/Plh4zNspagPQ+NonNILjINI+U7Xec='; // secret key
 
     // Request payload
     $data = [
@@ -461,7 +548,7 @@ function recharge($service_id,$beneficiary, $trans_id, $code, $amount) {
     $decodedResponse = json_decode($response, true);
 
     // Handle the API response
-    if (isset($decodedResponse['statusCode']) && $decodedResponse['statusCode'] === "200") {
+    if (isset($decodedResponse['message'])) {
       
         return true;
     } else {
@@ -470,6 +557,19 @@ function recharge($service_id,$beneficiary, $trans_id, $code, $amount) {
     }
 }
 
+// $service_id = "BCA"; // Example service ID
+// $beneficiary = "07031272572";
+// $trans_id = uniqid(); // Generate a unique transaction ID
+// $code = "MS5000"; // Product code
+// $amount = 1365;
+
+// $result = recharge($service_id, $beneficiary, $trans_id, $code, $amount);
+
+// if ($result) {
+//     echo "Recharge successful!";
+// } else {
+//     echo "Recharge failed!";
+// }
 
 
 function deduct($amt, $nickname) {

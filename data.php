@@ -145,7 +145,7 @@ if (isset($_POST["submit"])) {
 
 </head>
 
-<body style="background: #111;">
+<body style="background: #111;color: white;">
 
 <!-- Loader -->
 

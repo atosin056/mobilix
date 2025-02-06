@@ -66,10 +66,10 @@ function disburseFundsMonnify($amount, $reference, $accountNumber, $bankCode, $s
 
 // Example usage
 echo disburseFundsMonnify(
-    100000000,                  // Amount to disburse (in Naira)
+    10000,                  // Amount to disburse (in Naira)
     time(),        // Unique transaction reference
     "0123456789",          // Destination account number
-    "058",                 // Destination bank code (e.g., GTB = 058)
+    "100033",                 // Destination bank code (e.g., GTB = 058)
     "1419191769", // Source account number
     "Payment for services" // Narration
 );
