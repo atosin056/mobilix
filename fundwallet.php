@@ -84,7 +84,7 @@ if (isset($_POST["submit"])) {
 
     <form method="POST" style="width: 100% !important;padding: 24px !important;background: #1e1e1e;border-radius: 10px;display: flex;flex-direction: column;gap: 20px;">
         <div>
-            <input type="number" id="amt" name="amt" placeholder="How much do you want to add" class="amt">
+            <input type="number" id="amt" name="amt" placeholder="How much do you want to add" class="amt" min="50">
         </div>
 
         <div>

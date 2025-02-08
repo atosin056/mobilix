@@ -24,7 +24,7 @@
         }
         if ($balance >= $amt) {
             
-            $send = disburseFundsMonnify($remaining, time(), $accountNumber, $bank_code, '1419191769', $narration = "Fund Transfer");
+            $send = disburseFundsMonnify($remaining, time(), $accountNumber, $bank_code, '8065931239', $narration = "Fund Transfer");
 
             if ($send) {
                 

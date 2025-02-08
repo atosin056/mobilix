@@ -11,9 +11,9 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberToCarrierMapper;
 
 
-$monnifyApiKey = 'MK_TEST_TYKDWRWU64'; // Replace with your actual API Key
-$monnifySecretKey = 'Y01XFKC036187NTNNYSZ0V1VD72QGQT5'; // Replace with your actual Secret Key
-$monnifyContractCode = '8703332842'; // Replace with your contract code
+$monnifyApiKey = 'MK_PROD_81UYBNHUA7'; // Replace with your actual API Key
+$monnifySecretKey = 'TC81C1SHGCTQKC1FCPUXE7K6WT9E5CXW'; // Replace with your actual Secret Key
+$monnifyContractCode = '726510003240'; // Replace with your contract code
 
 function initiateMonnifyCheckout($amount, $nickname, $mymoney) {
     global $monnifyApiKey, $monnifySecretKey, $monnifyContractCode;
@@ -24,7 +24,7 @@ function initiateMonnifyCheckout($amount, $nickname, $mymoney) {
     }
 
     // Authentication URL
-    $authUrl = "https://sandbox.monnify.com/api/v1/auth/login"; // Use production URL in live environment
+    $authUrl = "https://api.monnify.com/api/v1/auth/login"; // Use production URL in live environment
     $authCredentials = base64_encode("$monnifyApiKey:$monnifySecretKey");
 
     // Initialize cURL for authentication
@@ -64,18 +64,22 @@ function initiateMonnifyCheckout($amount, $nickname, $mymoney) {
 
     // Continue to initiate payment (if needed)
     // Example: Create transaction payload and interact with the transaction endpoint
-    $transactionUrl = "https://sandbox.monnify.com/api/v1/merchant/transactions/init-transaction";
+    $transactionUrl = "https://api.monnify.com/api/v1/merchant/transactions/init-transaction";
+
+    $paymentReference = uniqid(); // Generate a unique reference
 
     $transactionData = [
         'amount' => $mymoney, // Amount in Naira
         'customerName' => $nickname,
-        'paymentReference' => uniqid(), // Generate a unique reference
+        'paymentReference' => $paymentReference, // Use the pre-defined variable
         'paymentDescription' => 'Transaction for ' . $nickname,
         'customerEmail' => $_SESSION["customeremail"],
         'currencyCode' => 'NGN',
         'contractCode' => $monnifyContractCode,
-        'redirectUrl' => 'http://localhost/mobilix/callback.php?amount=' . $amount . '&nickname=' . urlencode($nickname),
+        'redirectUrl' => 'http://localhost/mobilix/callback.php?amount=' . $amount . '&nickname=' . urlencode($nickname) . '&paymentReference=' . $paymentReference,
     ];
+
+
 
     // Initialize cURL for transaction initialization
     $transactionCh = curl_init();
@@ -346,12 +350,12 @@ function sendmail($to, $subject, $message) {
 
 function disburseFundsMonnify($amount, $reference, $accountNumber, $bankCode, $sourceAccountNumber, $narration = "Fund Transfer") {
 
-    $monnifyApiKey = 'MK_TEST_TYKDWRWU64'; 
+    $monnifyApiKey = 'MK_PROD_81UYBNHUA7'; 
     
-    $monnifySecretKey = 'Y01XFKC036187NTNNYSZ0V1VD72QGQT5'; 
+    $monnifySecretKey = 'TC81C1SHGCTQKC1FCPUXE7K6WT9E5CXW'; 
 
     // Step 1: Authenticate
-    $authUrl = "https://sandbox.monnify.com/api/v1/auth/login";
+    $authUrl = "https://api.monnify.com/api/v1/auth/login";
     
     $authCredentials = base64_encode("$monnifyApiKey:$monnifySecretKey");
     
@@ -391,7 +395,7 @@ function disburseFundsMonnify($amount, $reference, $accountNumber, $bankCode, $s
     $accessToken = $decodedAuthResponse['responseBody']['accessToken'];
 
     // Step 2: Disburse funds
-    $disbursementUrl = "https://sandbox.monnify.com/api/v2/disbursements/single";
+    $disbursementUrl = "https://api.monnify.com/api/v2/disbursements/single";
     $data = [
         "amount" => $amount,
         "reference" => $reference,
@@ -548,12 +552,11 @@ function recharge($service_id,$beneficiary, $trans_id, $code, $amount) {
     $decodedResponse = json_decode($response, true);
 
     // Handle the API response
-    if (isset($decodedResponse['message'])) {
-      
+    if (isset($decodedResponse['message']) == '200') {
         return true;
     } else {
         echo "Error: " . ($decodedResponse['message'] ?? 'Unknown error') . "\n";
-        return null;
+        return false;
     }
 }
 
