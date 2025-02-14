@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 06, 2025 at 07:29 PM
+-- Generation Time: Feb 14, 2025 at 07:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,7 +50,9 @@ INSERT INTO `airtime` (`id`, `service_id`, `Network`, `service_type`, `price`, `
 (6, 'BAD', 'Airtel', 'STANDARD', 50, '678a7d8f111c6', '09115197167'),
 (7, 'BAD', 'Airtel', 'PREMIUM', 120, '1737393740', '09115197167'),
 (8, 'BAD', 'MTN', 'PREMIUM', 100, '1737805163', '07031272572'),
-(9, 'BAD', 'Airtel', 'PREMIUM', 1000, '1738509876', '09115197167');
+(9, 'BAD', 'Airtel', 'PREMIUM', 1000, '1738509876', '09115197167'),
+(10, 'BAD', 'Glo', 'PREMIUM', 1000, '1739042269', '07057175195'),
+(11, 'BAD', 'MTN', 'PREMIUM', 6000, '1739540383', '07031272572');
 
 -- --------------------------------------------------------
 
@@ -109,25 +111,27 @@ CREATE TABLE `data_bundles` (
 --
 
 INSERT INTO `data_bundles` (`id`, `name`, `product_code`, `price`, `network`, `service_id`, `real_price`) VALUES
-(2, '500MB Airtel Data - 30days Validity', 'MBAS500', '194', 'Airtel', 'BCD', '144'),
-(3, '1GB Airtel Data - 30days Validity', 'MBAS1', '300', 'Airtel', 'BCD', '290'),
-(4, '2GB Airtel Data - 30days Validity', 'MBAS2', '600', 'Airtel', 'BCD', '580'),
-(5, '5GB Airtel Data - 30days Validity', 'MBAS5', '1500', 'Airtel', 'BCD', '1450'),
-(6, '10GB Airtel Data - 30days Validity', 'MBAS10', '2950', 'Airtel', 'BCD', '2900'),
-(7, '15GB Airtel Data - 30days Validity', 'MBAS15', '4400', 'Airtel', 'BCD', '4350'),
-(8, '20GB Airtel Data - 30days Validity', 'MBAS20', '5850', 'Airtel', 'BCD', '5800'),
+(1, '300MB Airtel Data - 7days Validity', 'MBAS300', '254', 'Airtel', 'BCD', '214'),
+(2, '500MB Airtel Data - 30days Validity', 'MBAS500', '400', 'Airtel', 'BCD', '351'),
+(3, '1GB Airtel Data - 30days Validity', 'MBAS1', '750', 'Airtel', 'BCD', '703'),
+(4, '2GB Airtel Data - 30days Validity', 'MBAS2', '1406', 'Airtel', 'BCD', '1406'),
+(5, '5GB Airtel Data - 30days Validity', 'MBAS5', '3615', 'Airtel', 'BCD', '3515'),
+(6, '10GB Airtel Data - 30days Validity', 'MBAS10', '7130', 'Airtel', 'BCD', '7030'),
+(7, '15GB Airtel Data - 30days Validity', 'MBAS15', '10620', 'Airtel', 'BCD', '10545'),
+(8, '20GB Airtel Data - 30days Validity', 'MBAS20', '14150', 'Airtel', 'BCD', '14060'),
 (9, '500MB Mtn Sme - Monthly', 'MS500', '190', 'MTN', 'BCA', '140'),
 (10, '1GB Mtn Sme - Monthly', 'MS1000', '300', 'MTN', 'BCA', '273'),
-(11, '2GB Mtn Sme - Monthly', 'MS2000', '566', 'MTN', 'BCA', '546'),
-(12, '3GB Mtn Sme - Monthly', 'MS3000', '869', 'MTN', 'BCA', '819'),
-(13, '5GB Mtn Sme - Monthly', 'MS5000', '1400', 'MTN', 'BCA', '1365'),
-(14, '10GB Mtn Sme - Monthly', 'MS10000', '2780', 'MTN', 'BDA', '2730'),
-(16, '500MB Glo Data - 30days Validity', 'MBGG500', '193', 'Glo', 'BCC', '148'),
-(17, '1GB Glo Data - 30days Validity', 'MBGG1', '300', 'Glo', 'BCC', '290'),
-(18, '2GB Glo Data - 30days Validity', 'MBGG2', '600', 'Glo', 'BCC', '580'),
-(19, '3GB Glo Data - 30days Validity', 'MBGG3', '920', 'Glo', 'BCC', '870'),
-(20, '5GB Glo Data - 30days Validity', 'MBGG5', '1500', 'Glo', 'BCC', '1450'),
-(21, '10GB Glo Data - 30days Validity', 'MBGG10', '2950', 'Glo', 'BCC', '2900');
+(11, '2GB Mtn Sme - Monthly', 'MS2000', '600', 'MTN', 'BCA', '546'),
+(12, '3GB Mtn Sme - Monthly', 'MS3000', '900', 'MTN', 'BCA', '819'),
+(13, '5GB Mtn Sme - Monthly', 'MS5000', '1450', 'MTN', 'BCA', '1365'),
+(14, '10GB Mtn Sme - Monthly', 'MS10000', '2800', 'MTN', 'BDA', '2730'),
+(15, '200MB Glo Data - 14days Validity', 'MBGG200', '100', 'Glo', 'BCC', '96'),
+(16, '500MB Glo Data - 30days Validity', 'MBGG500', '250', 'Glo', 'BCC', '234'),
+(17, '1GB Glo Data - 30days Validity', 'MBGG1', '500', 'Glo', 'BCC', '470'),
+(18, '2GB Glo Data - 30days Validity', 'MBGG2', '1000', 'Glo', 'BCC', '940'),
+(19, '3GB Glo Data - 30days Validity', 'MBGG3', '1450', 'Glo', 'BCC', '1410'),
+(20, '5GB Glo Data - 30days Validity', 'MBGG5', '2450', 'Glo', 'BCC', '2350'),
+(21, '10GB Glo Data - 30days Validity', 'MBGG10', '4750', 'Glo', 'BCC', '4700');
 
 -- --------------------------------------------------------
 
@@ -609,10 +613,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `pin`, `firstname`, `lastname`, `email`, `phone`, `nickname`, `balance`) VALUES
-(3, '2804', 'Oluwatosin', 'Akinfenwa', 'atosin056@gmail.com', '09115197167', 'Tosin', 146),
+(3, '2804', 'Oluwatosin', 'Akinfenwa', 'atosin056@gmail.com', '09115197167', 'Tosin', 874),
 (7, '0306', 'Oluwanifemi', 'Akinfenwa', 'anifemi513@gmail.com', '09015134469', 'Nifemi', 551),
 (8, '1505', 'Paul', 'Okunoye', 'rexpauldrex5@gmail.com', '08088222406', 'Rex', 375),
-(9, '1980', 'Kehinde', 'Akinfenwa', 'fenwakehinde538@gmail.com', '07031272572', 'Hellen', 721);
+(9, '1980', 'Kehinde', 'Akinfenwa', 'fenwakehinde538@gmail.com', '07031272572', 'Hellen', 841),
+(15, '3568', 'Olusheye', 'Akinfenwa', 'akinolu35@yahoo.com', '07057175195', 'Olusheye', 50);
 
 --
 -- Indexes for dumped tables
@@ -668,7 +673,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `airtime`
 --
 ALTER TABLE `airtime`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `airtimeprices`
@@ -680,7 +685,7 @@ ALTER TABLE `airtimeprices`
 -- AUTO_INCREMENT for table `data_bundles`
 --
 ALTER TABLE `data_bundles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `mobilix_transfers`
@@ -704,7 +709,7 @@ ALTER TABLE `tv`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

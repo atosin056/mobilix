@@ -18,13 +18,9 @@ if (isset($_POST["submit"])) {
 
     $pin = mysqli_real_escape_string($conn, $_POST["pin"]);
 
-    $checkPin = checkPin($pin);
 
-    if ($checkPin == "next") {
         
         $registerUser = registerUser($fname, $lname, $email, $phone, $nickname, $pin);
-
-    }
 
     $message = '<!DOCTYPE html>
 <html lang="en">
