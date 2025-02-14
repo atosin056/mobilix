@@ -76,7 +76,7 @@ function initiateMonnifyCheckout($amount, $nickname, $mymoney) {
         'customerEmail' => $_SESSION["customeremail"],
         'currencyCode' => 'NGN',
         'contractCode' => $monnifyContractCode,
-        'redirectUrl' => 'http://localhost/mobilix/callback.php?amount=' . $amount . '&nickname=' . urlencode($nickname) . '&paymentReference=' . $paymentReference,
+        'redirectUrl' => 'https://mobilix.com.ng/callback.php?amount=' . $amount . '&nickname=' . urlencode($nickname) . '&paymentReference=' . $paymentReference,
     ];
 
 
